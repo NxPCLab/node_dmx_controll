@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/uikit/2.11.0/css/uikit.almost-flat.min.css" rel="stylesheet">
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/uikit/2.11.0/js/uikit.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script>
+        var socket = io();
+	var c1 = 0;
+	var c2 = 0;
+	var c3 = 0;
+	var c4 = 0;
+
+	$("button").click(function() {
+          console.log('clicked');	
+	});
+	
+	socket.on('chat message', function(msg){
+	    c1 = msg[0];
+	    c2 = msg[1];
+	    c3 = msg[2];
+	    c4 = msg[3];
+	    $("#c1").html(c1);
+	    $("#c2").html(c2);
+	    $("#c3").html(c3);
+	    $("#c4").html(c4);
+	    console.log(msg);
+	});
+
+
+	
+	$(function() {
+	    $("#slider1").slider({max:255, change: function( event, ui ) {
+	        c1 = $( "#slider1" ).slider( "option", "value" )
+        	socket.emit('chat message', [c1, c2, c3, c4]);
+	        
+	    }});
+	    $("#slider2").slider({max:255, change: function( event, ui ) {
+	        c2 = $( "#slider2" ).slider( "option", "value" )
+        	socket.emit('chat message', [c1, c2, c3, c4]);
+	    }});
+
+	    $("#slider3").slider({max:255, change: function( event, ui ) {
+	        c3 = $( "#slider3" ).slider( "option", "value" )
+        	socket.emit('chat message', [c1, c2, c3, c4]);
+	    }});
+
+	    $("#slider4").slider({max:255, change: function( event, ui ) {
+	        c4 = $( "#slider4" ).slider( "option", "value" )
+        	socket.emit('chat message', [c1, c2, c3, c4]);
+	    }});
+	});
+    </script>
+    <style>
+        .container {
+	    margin: 20px;
+	}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+        <h1>皆でストロボ alpha</h1>
+        <div class="uk-grid">
+            <div class="uk-width-1-2">
+                <h2>チャンネル</h2>
+                <h3>Channel 1(光の強さのマスター)</h3>
+                <div id="slider1"></div>
+                <h3>Channel 2(下の光の強さ)</h3>
+                <div id="slider2"></div>
+                <h3>Channel 3(上の光の強さ)</h3>
+                <div id="slider3"></div>
+                <h3>Channel 4(光のパターン)</h3>
+                <div id="slider4"></div>
+            </div>
+            <div class="uk-width-1-2">
+                <h2>今の状況</h2>
+                <h3>Channel 1(光の強さのマスター)</h3>
+                <div id="c1"></div>
+                <h3>Channel 2(下の光の強さ)</h3>
+                <div id="c2"></div>
+                <h3>Channel 3(上の光の強さ)</h3>
+                <div id="c3"></div>
+                <h3>Channel 4(光のパターン)</h3>
+                <div id="c4"></div>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>
